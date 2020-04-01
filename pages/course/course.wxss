@@ -22,17 +22,19 @@
   .top {
     display: flex;
     flex-direction: row;
-    margin-left: 35rpx;
-    background-color: #d2e6b3;
-    color: #7cba23;
+    margin-left: 48rpx;
+    white-space: nowrap;
+    background-color: #ffffff;
+    color: #73b4ef;
   }
   
   .top-text {
-    width: 100rpx;
-    height: 35rpx;
-    font-size: 9pt;
+    width: 143rpx;
+    height: 50rpx;
+    /* font-size: 9pt; */
     justify-content: center;
     display: flex;
+    /* display: inline-block; */
     align-items: center;
   }
   
@@ -43,9 +45,9 @@
   }
   
   .left {
-    width: 35rpx;
-    height: 100rpx;
-    font-size: 9pt;
+    width: 48rpx;
+    height: 106rpx;
+    /* font-size: 9pt; */
     justify-content: center;
     display: flex;
     align-items: center;
@@ -71,5 +73,5 @@
   
   .weui-cell__bd{
     -webkit-box-flex:1;-webkit-flex:1;flex:1;
-    color: #7cba23;
+    color: #73b4ef;
   }

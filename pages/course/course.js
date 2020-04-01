@@ -14,6 +14,7 @@ Page({
     zc: 0,   //周次
     wlist: [],
 
+    currDate: null,
     listData: [],
     course_empty: true,
   },
@@ -49,10 +50,14 @@ Page({
     } else {
       //已登录
       wx.showToast({ title: '正在加载课表', icon: 'loading', duration: 10000 });
+      // this.data.currDate =  new Date().toLocaleDateString().replace(/\//g,'-');   //使用反斜杠转义/
+      var date = new Date();       var mon = date.getMonth() + 1;       var day = date.getDate();
+      this.data.currDate = date.getFullYear() + "-"+ (mon<10?"0"+mon:mon) + "-"+(day<10?"0"+day:day);
+      // console.log(this.data.currDate);
       var userName = wx.getStorageSync('userName');
-      var course_cache = userName + this.data.firstYear; //将学号拼接年份作为缓存的key
-
-
+      var course_cache = userName + this.data.currDate.substr(0,6); //将学号拼接年份作为缓存的key
+      // console.log(this.data.currDate);
+      this.getZc();
 
       if (wx.getStorageSync(course_cache)) {
         //缓存中有课表
@@ -73,8 +78,8 @@ Page({
             token: wx.getStorageSync('token'),
           },
           data: {
-            'method': 'getKbcxAzc',  //必填
-            'xh': wx.getStorageSync('userName'),  //必填，使用与获取token时不同的学号，则可以获取到新输入的学号的课表
+            'method': 'getKbcxAzc', 
+            'xh': wx.getStorageSync('userName'),  
             // 'xnxqid': this.data.firstYear,  //格式为"YYYY-YYYY-X"，非必填，不包含时返回当前日期所在学期课表
             'zc': '1',
           },
@@ -102,31 +107,82 @@ Page({
 
   bindPicker1Change: function (e) {
     this.setData({
-      value1: e.detail.value
+      zc : e.detail.value
     });
     this.getweekCourse();
   },
 
   getweekCourse: function(){
+
+    //首先清空wlist
+    this.data.wlist = [];
+    console.log("清空了wlist");
+
     for(var i=0;i<this.data.listData.length;i++)
     {
+      var kkzc = this.data.listData[i].kkzc;
+      var bg_and_ed_zc;  //开始周次和结束周次
+      var flag=0;
+      var zc=parseInt(this.data.zc);
+      if(kkzc.indexOf('-') != -1 )
+      {
+        bg_and_ed_zc = kkzc.split('-');
+        if( (zc+1) < parseInt(bg_and_ed_zc[0]) || (zc+1) > parseInt(bg_and_ed_zc[1]) ){
+        console.log();
+        flag=1;   
+        }
+      }
+      else
+      {
+        bg_and_ed_zc = kkzc.split(',');
+        console.log(bg_and_ed_zc);
+        if(bg_and_ed_zc.indexOf(String(zc+1)) ==-1){
+        flag=1;
+        }
+      }
+      if(flag==1) continue;
+
       var tempobj = {
         xqj : this.data.listData[i].kcsj[0],
         skjc : this.data.listData[i].kcsj[2],
         skcd : 2,
         kcmc : this.data.listData[i].kcmc+"@"+this.data.listData[i].jsmc,
       };
-      this.data.wlist[i] = tempobj;
-      // console.log("打印生成的数组");
-      // console.log(tempobj);
+      this.data.wlist.push(tempobj);
     }
-    // 打印最后的结果
     let wlist = this.data.wlist;
     this.setData({
       wlist
     });
     console.log(this.data.wlist);
-    console.log("打印最后的结果");
+    console.log("生成课表数组成功");
+  },
+
+
+  getZc: function(){
+    var $this=this;
+    wx.request({
+      url: 'https://jw.webvpn.jxust.edu.cn/app.do',
+      header: {
+        token: wx.getStorageSync('token')
+      },
+      data: {
+        'method':'getCurrentTime',
+        'currDate': this.data.currDate,
+      },
+      method: 'GET',
+      success: function(res){
+        // $this.data.zc = res.data.zc;
+        $this.setData({
+          zc : res.data.zc-1,
+        }),   //储存的周次从0开始
+        console.log("获取周次成功");        
+        console.log($this.data.zc);
+      },
+      fail: function(){
+        console.log("获取周次失败！！！");
+      }
+    })
   }
 
 });
