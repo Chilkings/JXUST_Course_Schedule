@@ -1,43 +1,26 @@
-<view wx:if="{{course_empty}}">
-   <image src="/images/nothing.png"></image>
+<!--index.wxml-->
+<view class="weui-cell__bd">
+	<picker bindchange="bindPicker1Change" range="{{array1}}">
+		<view class="weui-select center">{{array1[zc]}}</view>
+	</picker>
 </view>
-<block wx:else>
 
- <view class="phone_one" bindtap="clickYear">
-  <view class="phone_year">{{firstYear}}</view>
-  <image src="../../images/down.png" class="year_image {{selectArea ? 'rotateRight' :''}}"></image>
-  </view>
- 
-<view class="year_box">
-   <view class="phone_select" hidden="{{selectYear}}">
-   <view wx:for="{{time}}" wx:for-item="i">
-    <view class="select_one" bindtap="mySelect" data-me="{{i}}">{{i}}</view>
-    </view>
-  </view>
- </view>
-
-<!-- 主体 -->
-<view class="table">
-    <view class="thead bg-w">
-       <view class="th"> </view>
-       <view class="th">周一</view>
-       <view class="th">周二</view>
-       <view class="th">周三</view>
-       <view class="th">周四</view>
-       <view class="th">周五</view>
-    </view>
-    <block>
-    <block wx:for="{{listData}}" wx:for-index="i">
-
-    <view class="tr bg-g" wx:if="{{i % 2 == 0}}">
-        <view class="td" wx:for="{{listData[i]}}" wx:for-item="course">{{course}}</view>
-     </view>
-
-     <view class="tr" wx:else>
-        <view class="td" wx:for="{{listData[i]}}" wx:for-item="course">{{course}}</view>
-     </view>
-
-     </block>
-     </block>
+<view class="top">
+	<view wx:for="{{['一','二','三','四','五','六','日']}}" class="top-text">周{{item}}</view>
 </view>
-</block>
+<scroll-view scroll-y="true" class="scroll">
+	<view style="height:1200rpx;width:730rpx;display:flex;">
+		<view style="background-color:#D2E6B3;color:#7cba23;">
+			<view wx:for="{{[1,2,3,4,5,6,7,8]}}" class="left">
+				{{item}}
+			</view>
+		</view>
+
+		<!--课表-->
+		<view wx:for="{{wlist}}">
+			<view class="flex-item kcb-item" bindtap="showCardView" data-statu="open" data-index="{{index}}" style="margin-left:{{(item.xqj-1)*100}}rpx;margin-top:{{(item.skjc-1)*100+5}}rpx;height:{{item.skcd*100-5}}rpx;background-color:{{colorArrays[index%8]}}">
+				<view class="smalltext">{{item.kcmc}}</view>
+			</view>
+		</view>
+	</view>
+</scroll-view>

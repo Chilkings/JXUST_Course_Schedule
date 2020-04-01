@@ -1,39 +1,29 @@
 {
-  "pages":[
-    "pages/index/index",
+  "pages": [
     "pages/course/course",
-    "pages/grade/grade",
-    "pages/hole/hole",
-    "pages/comment/comment",
-    "pages/publish/publish"
+    "pages/index/index"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "list": [{
-      "pagePath": "pages/index/index",
-      "text": "个人主页",
-      "iconPath": "images/index.png",
-      "selectedIconPath":"images/index_.png"
-    },{
-      "pagePath": "pages/course/course",
-      "text": "课程表",
-      "iconPath": "images/course_.png",
-      "selectedIconPath":"images/course.png"
-    }, {
-      "pagePath": "pages/grade/grade",
-      "text": "成绩查询",
-      "iconPath": "images/grade_.png",
-      "selectedIconPath":"images/grade.png"
-    }, {
-      "pagePath": "pages/hole/hole",
-      "text": "树洞",
-      "iconPath": "images/hole_.png",
-      "selectedIconPath":"images/hole.png"
-    }]
-  }
+    "list": [
+      {
+        "pagePath": "pages/course/course",
+        "text": "课程表",
+        "iconPath": "images/course_.png",
+        "selectedIconPath": "images/course.png"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "个人主页",
+        "iconPath": "images/index.png",
+        "selectedIconPath": "images/index_.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
 }

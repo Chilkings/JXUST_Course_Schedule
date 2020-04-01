@@ -25,25 +25,22 @@ if(objData.userName && objData.userPassword){
    wx.setStorageSync('remind', objData.remind);
    //请求教务系统
    wx.request({
-    url: 'https://fupengfei.s1.natapp.cc/personal_admin/check_user',
-    data: {
-    'username':objData.userName,
-    'password':objData.userPassword,
-    },
+    url: 'https://jw.webvpn.jxust.edu.cn/app.do',
     method: 'GET',
-    dataType: 'json',
+    data :{
+      'method' : 'authUser',
+      'xh' : wx.getStorageSync('userName'),
+      'pwd' : wx.getStorageSync('userPassword')
+    },
     success: function(res){
-    wx.hideToast();
-    if(res.statusCode == 200 && res.data.code == 200){
-       wx.setStorageSync('isLogin', true);
-       $this.setData({isLogin: true,user: res.data.data});
-        wx.setStorageSync('user', res.data.data);//登录者的名字 树洞页面要用到
-        wx.showToast({title: '已登录', icon: 'success', duration: 1500});
-      }else{
-          wx.setStorageSync('isLogin', false);
-          $this.setData({isLogin: false});
-          wx.showModal({title: '登录失败', content: '账号或密码错误!', showCancel: false});
-     }
+      console.log(res);
+      console.log("登录获取token成功");
+      wx.hideToast();
+      wx.setStorageSync('isLogin', true);
+      $this.setData({isLogin: true,user: res.data.userrealname});
+      wx.setStorageSync('user', res.data.userrealname);//登录者的名字 树洞页面要用到
+      wx.setStorageSync('token', res.data.token);
+      wx.showToast({title: '已登录', icon: 'success', duration: 1500});
     },
     fail: function() {
     wx.hideToast();
@@ -96,7 +93,7 @@ logout:function(e){
   // 页面隐藏
  },
  onUnload:function(){
-     // 页面关闭
+     // 页面关闭 如果没有记住密码就销毁密码
      console.log('unload');
      var remind = wx.getStorageSync('remind');
      if(!remind){
